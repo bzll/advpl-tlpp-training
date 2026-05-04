@@ -1,0 +1,36 @@
+#include "tlpp-core.th"
+#include "protheus.ch"
+
+Namespace Treinamento.Pedido
+
+Class PedidoValidator
+    Public Method New() Constructor
+    Public Method ValidarCliente(cCliente as Character, cLoja as Character) as Logical
+    Public Method ValidarValor(nValor as Numeric) as Logical
+    Public Method ValidarPedido(cCliente as Character, cLoja as Character, nValor as Numeric) as Logical
+EndClass
+
+Method New() Class PedidoValidator
+Return Self
+
+Method ValidarCliente(cCliente as Character, cLoja as Character) as Logical Class PedidoValidator
+    Local lRet := .F.
+
+    If Empty(cCliente) .Or. Empty(cLoja)
+        Return .F.
+    EndIf
+
+    DbSelectArea("SA1")
+    SA1->(DbSetOrder(1))
+
+    If SA1->(DbSeek(xFilial("SA1") + cCliente + cLoja))
+        lRet := !Empty(SA1->A1_NOME)
+    EndIf
+
+Return lRet
+
+Method ValidarValor(nValor as Numeric) as Logical Class PedidoValidator
+Return nValor > 0
+
+Method ValidarPedido(cCliente as Character, cLoja as Character, nValor as Numeric) as Logical Class PedidoValidator
+Return ::ValidarCliente(cCliente, cLoja) .And. ::ValidarValor(nValor)

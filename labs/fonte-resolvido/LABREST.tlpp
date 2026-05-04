@@ -1,0 +1,46 @@
+#include "tlpp-core.th"
+#include "protheus.ch"
+#include "restful.ch"
+
+WSRESTFUL LABCliente DESCRIPTION "Lab API de Clientes"
+    WSDATA codigo AS CHARACTER
+    WSDATA loja   AS CHARACTER
+
+    WSMETHOD GET DESCRIPTION "Consulta cliente" WSSYNTAX "/LABCliente/{codigo}/{loja}"
+END WSRESTFUL
+
+WSMETHOD GET WSRECEIVE codigo, loja WSSERVICE LABCliente
+    Local oJson  := JsonObject():New()
+    Local lFound := .F.
+
+    LABLogRest("GET /LABCliente/" + ::codigo + "/" + ::loja)
+
+    If Empty(::codigo) .Or. Empty(::loja)
+        SetRestFault(400, "Parametros obrigatorios nao informados")
+        Return .T.
+    EndIf
+
+    DbSelectArea("SA1")
+    SA1->(DbSetOrder(1))
+
+    lFound := SA1->(DbSeek(xFilial("SA1") + ::codigo + ::loja)) .And. !SA1->(Deleted())
+
+    If lFound
+        oJson["codigo"]    := AllTrim(SA1->A1_COD)
+        oJson["loja"]      := AllTrim(SA1->A1_LOJA)
+        oJson["nome"]      := AllTrim(SA1->A1_NOME)
+        oJson["municipio"] := AllTrim(SA1->A1_MUN)
+        oJson["uf"]        := AllTrim(SA1->A1_EST)
+        ::SetResponse(oJson:ToJson())
+    Else
+        SetRestFault(404, "Cliente nao encontrado")
+    EndIf
+
+Return .T.
+
+Static Function LABLogRest(cMsg)
+    Default cMsg := ""
+
+    ConOut(DToC(Date()) + " " + Time() + " - LABREST - " + cMsg)
+
+Return

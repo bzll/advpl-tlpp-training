@@ -1,0 +1,53 @@
+#include "tlpp-core.th"
+#include "protheus.ch"
+
+Namespace Treinamento.Pedido
+
+Class PedidoService
+    Public Method New() Constructor
+    Public Method Validar(cCliente as Character, cLoja as Character, nTotal as Numeric) as Array
+    Public Method ValidarCliente(cCliente as Character, cLoja as Character) as Array
+    Public Method ValidarTotal(nTotal as Numeric) as Array
+EndClass
+
+Method New() Class PedidoService
+Return Self
+
+Method Validar(cCliente as Character, cLoja as Character, nTotal as Numeric) as Array Class PedidoService
+    Local aCli   := ::ValidarCliente(cCliente, cLoja)
+    Local aTotal := ::ValidarTotal(nTotal)
+
+    If !aCli[1]
+        Return aCli
+    EndIf
+
+    If !aTotal[1]
+        Return aTotal
+    EndIf
+
+Return {.T., "Pedido valido."}
+
+Method ValidarCliente(cCliente as Character, cLoja as Character) as Array Class PedidoService
+    If Empty(cCliente) .Or. Empty(cLoja)
+        Return {.F., "Cliente e loja sao obrigatorios."}
+    EndIf
+
+    DbSelectArea("SA1")
+    SA1->(DbSetOrder(1))
+
+    If !SA1->(DbSeek(xFilial("SA1") + cCliente + cLoja)) .Or. SA1->(Deleted())
+        Return {.F., "Cliente nao encontrado."}
+    EndIf
+
+    If Empty(SA1->A1_NOME)
+        Return {.F., "Cliente sem nome preenchido."}
+    EndIf
+
+Return {.T., "Cliente valido."}
+
+Method ValidarTotal(nTotal as Numeric) as Array Class PedidoService
+    If nTotal <= 0
+        Return {.F., "Total do pedido deve ser maior que zero."}
+    EndIf
+
+Return {.T., "Total valido."}

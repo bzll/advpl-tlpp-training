@@ -1,0 +1,46 @@
+#include "tlpp-core.th"
+#include "protheus.ch"
+#include "restful.ch"
+
+WSRESTFUL ZCliente DESCRIPTION "API de Clientes"
+    WSDATA cCodCli AS CHARACTER
+    WSDATA cLoja   AS CHARACTER
+
+    WSMETHOD GET DESCRIPTION "Consulta cliente" WSSYNTAX "/ZCliente/{cCodCli}/{cLoja}"
+END WSRESTFUL
+
+WSMETHOD GET WSRECEIVE cCodCli, cLoja WSSERVICE ZCliente
+    Local oJson  := JsonObject():New()
+    Local lFound := .F.
+
+    If Empty(::cCodCli) .Or. Empty(::cLoja)
+        SetRestFault(400, "Codigo e loja sao obrigatorios")
+        Return .T.
+    EndIf
+
+    ZClienteLog("GET /ZCliente/" + ::cCodCli + "/" + ::cLoja)
+
+    DbSelectArea("SA1")
+    SA1->(DbSetOrder(1))
+
+    lFound := SA1->(DbSeek(xFilial("SA1") + ::cCodCli + ::cLoja)) .And. !SA1->(Deleted())
+
+    If lFound
+        oJson["codigo"]    := AllTrim(SA1->A1_COD)
+        oJson["loja"]      := AllTrim(SA1->A1_LOJA)
+        oJson["nome"]      := AllTrim(SA1->A1_NOME)
+        oJson["municipio"] := AllTrim(SA1->A1_MUN)
+        oJson["uf"]        := AllTrim(SA1->A1_EST)
+        ::SetResponse(oJson:ToJson())
+    Else
+        SetRestFault(404, "Cliente nao encontrado")
+    EndIf
+
+Return .T.
+
+Static Function ZClienteLog(cMsg)
+    Default cMsg := ""
+
+    ConOut(DToC(Date()) + " " + Time() + " - ZCliente - " + cMsg)
+
+Return
