@@ -1,0 +1,15 @@
+@baseUrl = http://localhost:8080/rest
+@codigo = 000001
+@loja = 01
+
+### Consulta cliente valido
+GET {{baseUrl}}/ZCliente/{{codigo}}/{{loja}}
+Accept: application/json
+
+### Consulta cliente inexistente
+GET {{baseUrl}}/ZCliente/999999/01
+Accept: application/json
+
+### Consulta lab cliente
+GET {{baseUrl}}/LABCliente/{{codigo}}/{{loja}}
+Accept: application/json

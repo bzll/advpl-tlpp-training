@@ -1,0 +1,29 @@
+#include "tlpp-core.th"
+#include "protheus.ch"
+
+Namespace Treinamento.Pedido
+
+Class PedidoService
+    Public Method New() Constructor
+    Public Method Validar(cCliente as Character, cLoja as Character, nTotal as Numeric) as Logical
+    Public Method ValidarCliente(cCliente as Character, cLoja as Character) as Logical
+    Public Method ValidarTotal(nTotal as Numeric) as Logical
+EndClass
+
+Method New() Class PedidoService
+Return Self
+
+Method Validar(cCliente as Character, cLoja as Character, nTotal as Numeric) as Logical Class PedidoService
+Return ::ValidarCliente(cCliente, cLoja) .And. ::ValidarTotal(nTotal)
+
+Method ValidarCliente(cCliente as Character, cLoja as Character) as Logical Class PedidoService
+    If Empty(cCliente) .Or. Empty(cLoja)
+        Return .F.
+    EndIf
+
+    // TODO: consultar SA1 e retornar mensagem detalhada.
+
+Return .T.
+
+Method ValidarTotal(nTotal as Numeric) as Logical Class PedidoService
+Return nTotal > 0

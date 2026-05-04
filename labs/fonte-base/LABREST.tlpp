@@ -1,0 +1,41 @@
+#include "tlpp-core.th"
+#include "protheus.ch"
+#include "restful.ch"
+
+WSRESTFUL LABCliente DESCRIPTION "Lab API de Clientes"
+    WSDATA codigo AS CHARACTER
+    WSDATA loja   AS CHARACTER
+
+    WSMETHOD GET DESCRIPTION "Consulta cliente" WSSYNTAX "/LABCliente/{codigo}/{loja}"
+END WSRESTFUL
+
+WSMETHOD GET WSRECEIVE codigo, loja WSSERVICE LABCliente
+    Local cJson  := ""
+    Local lFound := .F.
+
+    If Empty(::codigo) .Or. Empty(::loja)
+        SetRestFault(400, "Parametros obrigatorios nao informados")
+        Return .T.
+    EndIf
+
+    DbSelectArea("SA1")
+    SA1->(DbSetOrder(1))
+
+    lFound := SA1->(DbSeek(xFilial("SA1") + ::codigo + ::loja))
+
+    If lFound
+        cJson := '{'
+        cJson += '"codigo":"'    + AllTrim(SA1->A1_COD)  + '",'
+        cJson += '"loja":"'      + AllTrim(SA1->A1_LOJA) + '",'
+        cJson += '"nome":"'      + AllTrim(SA1->A1_NOME) + '",'
+        cJson += '"municipio":"' + AllTrim(SA1->A1_MUN)  + '",'
+        cJson += '"uf":"'        + AllTrim(SA1->A1_EST)  + '"'
+        cJson += '}'
+        ::SetResponse(cJson)
+    Else
+        SetRestFault(404, "Cliente nao encontrado")
+    EndIf
+
+    // TODO: registrar log tecnico da chamada.
+
+Return .T.

@@ -1,49 +1,106 @@
-# Treinamento Técnico ADVPL / TLPP
+# Treinamento Tecnico ADVPL / TLPP
 
-Este repositório contém materiais para o treinamento de Protheus/ADVPL/TLPP voltado para times de TI (suporte, desenvolvimento, troubleshooting). A ementa, inspirada por materiais do Terminal de Informação (TDN) e da TOTVS, abrange diversos temas e práticas comuns no universo Protheus.
+Este repositorio contem materiais para um treinamento tecnico de Protheus, ADVPL e TLPP voltado para times de TI, suporte, desenvolvimento, integracoes e sustentacao.
 
-## Conteúdo abordado
+O objetivo e servir como roteiro pratico para leitura de codigo, manutencao de rotinas, criacao de pequenos fontes customizados, diagnostico de problemas e entendimento de recursos comuns do ecossistema Protheus.
 
-- **Fundamentos do Protheus**: arquitetura (AppServer, DBAccess e SmartClient), estrutura de ambientes (SIGACFG, SIGAADV, etc.), conceito de RPO e dicionário de dados (SXs), tabelas padrão (por exemplo, SC5, SC6, SA1, SB1).
-- **Fundamentos de ADVPL**: sintaxe básica, tipos de dados, estruturas de controle (IF, DO CASE, WHILE, FOR), funções e procedures, manipulação de arrays e strings.
-- **Acesso a dados**: workareas, aliases e ordens, comandos como `DbSelectArea`, `DbSeek` e `DbSkip`, uso de índices e boas práticas de performance em acesso a dados.
-- **Dicionário de dados (SX3, SX2, etc.)**: estrutura do dicionário, campos, validações, triggers e o impacto no comportamento do sistema.
-- **Pontos de entrada (customizações)**: conceito, tipos (Before, After, Validação), identificação e uso, exemplos reais em módulos como MATA103 (pedidos de venda).
-- **TLPP / Programação orientada a objetos**: classes, métodos e propriedades, namespaces, diferenças entre ADVPL e TLPP, organização de código e boas práticas.
-- **ExecAuto e automação de rotinas**: conceito de MsExecAuto, estrutura de chamadas automáticas, tratamento de erros e casos de uso (ex.: entrada de nota fiscal com MATA103).
-- **Integrações (REST / APIs)**: criação de APIs no Protheus, consumo de APIs externas, autenticação (token, OAuth), serialização JSON e integrações reais (ex.: ServiceNow, bancos).
-- **Tratamento de erros e logs**: uso de `TRY/CATCH`, funções de log no Protheus, estratégia de debug (console, logs, análises) e troubleshooting.
-- **Performance e boas práticas**: otimização de queries, evitar loops desnecessários, uso de índices e boas práticas de escrita de código.
-- **Debug e troubleshooting**: leitura de logs do AppServer, identificação de erros comuns, debug de rotinas críticas, análise de problemas em produção, estratégias de rollback e correção.
-- **MVC, TReport e frameworks internos**: criação de rotinas MVC (modelos 1/3/X), componentes como `FWForm`, `FWMBrowse`, validação e grid; uso de `TReport`, `TRSection`, `TRCell` e `TRFunction` para gerar relatórios formatados.
-- **Glossário de funções e classes mais usadas**: `AllTrim`, `DbSeek`, `DbSelectArea`, `RecLock`, `MsUnlock`, `xFilial`, `RetSQLName`, `FWGetArea`, `MsExecAuto`, `JsonObject`, etc.
-- **Laboratórios e exercícios**: atividades hands‑on para consolidar o aprendizado, incluindo construção de rotinas, uso de MVC, criação de relatórios, chamadas REST e técnicas de debug.
+## Conteudo abordado
 
-## Estrutura do repositório
+- **Fundamentos do Protheus**: AppServer, DBAccess, SmartClient, RPO, dicionario de dados e tabelas padrao.
+- **ADVPL basico e intermediario**: tipos de dados, funcoes, arrays, strings, validacoes e rotinas `User Function`.
+- **Acesso a dados**: workareas, aliases, ordens, `DbSelectArea`, `DbSeek`, `DbSkip`, `RecLock`, `MsUnlock` e `TCQuery`.
+- **Dicionario de dados**: SX2, SX3, SX5, SIX, campos, indices, validacoes e impacto no comportamento das rotinas.
+- **Pontos de entrada**: customizacoes em rotinas padrao, boas praticas e cuidados de suporte.
+- **TLPP e orientacao a objetos**: classes, metodos, namespaces, tipagem e organizacao por servicos.
+- **MVC no Protheus**: `FWMBrowse`, `ModelDef`, `ViewDef`, `MenuDef`, validacoes e cadastro simples.
+- **TReport**: `TReport`, `TRSection`, `TRCell`, totalizadores e relatorios de diagnostico.
+- **ExecAuto**: montagem de arrays, `MsExecAuto`, transacao, `lMsErroAuto`, `GetAutoGRLog` e logs.
+- **REST/API**: criacao de endpoints, consumo de APIs externas, JSON, status HTTP e seguranca.
+- **Troubleshooting**: leitura de logs, tratamento de erros, performance, investigacao e documentacao de incidentes.
+- **Laboratorios**: exercicios hands-on para consolidar os temas do treinamento.
 
-No estado inicial, este repositório contém apenas este arquivo `README.md`. Os materiais (códigos de exemplo, slides, labs) podem ser adicionados em diretórios apropriados, por exemplo:
+## Estrutura do repositorio
 
-- `src/` – códigos fonte de exemplos em ADVPL/TLPP.
-- `labs/` – roteiros de exercícios práticos.
-- `docs/` – material de apoio, slides e documentação complementar.
+```text
+.
+|-- 01-fundamentos/
+|   |-- fonte-base/
+|   `-- fonte-resolvido/
+|-- 02-acesso-dados/
+|   |-- fonte-base/
+|   `-- fonte-resolvido/
+|-- 03-mvc/
+|   |-- fonte-base/
+|   `-- fonte-resolvido/
+|-- 04-treport/
+|   |-- fonte-base/
+|   `-- fonte-resolvido/
+|-- 05-execauto/
+|   |-- fonte-base/
+|   `-- fonte-resolvido/
+|-- 06-rest-api/
+|   |-- fonte-base/
+|   |-- fonte-resolvido/
+|   `-- requests/
+|-- 07-troubleshooting/
+|   |-- fonte-base/
+|   `-- fonte-resolvido/
+|-- docs/
+|-- labs/
+|   |-- fonte-base/
+|   `-- fonte-resolvido/
+|-- setup/
+|   `-- dicionario/
+`-- treinamento_advpl_tlpp_slides_e_laboratorio.md
+```
 
-## Como subir para o GitHub
+## Como usar
 
-Para criar um repositório no GitHub com este conteúdo, siga estes passos na sua máquina local:
+1. Comece pelo arquivo `treinamento_advpl_tlpp_slides_e_laboratorio.md`, que contem o roteiro completo com slides, exemplos e laboratorios.
+2. Em cada modulo, use os arquivos de `fonte-base/` como ponto de partida para demonstracoes ou exercicios.
+3. Desenvolva a solucao no ambiente Protheus/VS Code conforme a orientacao do treinamento.
+4. Use `fonte-resolvido/` para guardar as solucoes finais ou exemplos completos.
+5. Use `labs/fonte-base/` para os exercicios integrados e revisoes praticas.
 
-1. Clone o repositório vazio no GitHub (ou crie um novo repositório chamado `advpl-tlpp-training`).
-2. Adicione este conteúdo ao repositório local:
+## Modulos
 
-   ```bash
-   git clone https://github.com/seu_usuario/advpl-tlpp-training.git
-   cd advpl-tlpp-training
-   # copie os arquivos deste diretório para o repositório clonado
-   cp -r /caminho/do/repositorio_local/* .
-   git add .
-   git commit -m "Initial commit"
-   git push origin main
-   ```
+| Modulo | Tema | Fontes base |
+| --- | --- | --- |
+| `01-fundamentos` | Sintaxe, variaveis, pontos de entrada e TLPP inicial | `ZTipos`, `ZValCli`, `ZPEValid`, `PedidoValidator` |
+| `02-acesso-dados` | SA1, SB1, SX3, locks e queries | `ZConsProd`, `ZListCli`, `ZUpdCli`, `ZInfoCampo`, `ZQryCli` |
+| `03-mvc` | Cadastro MVC simples | `ZMVC001` |
+| `04-treport` | Relatorio de clientes | `ZTRCLI` |
+| `05-execauto` | ExecAuto com tratamento de erro | `ZExecNF` |
+| `06-rest-api` | Endpoint, consumo HTTP e JSON | `ZCliente`, `ZHttpGet`, `ZJsonCli` |
+| `07-troubleshooting` | Logs, erros e performance | `ZLog`, `ZTry`, `ZPerfLoop` |
+| `labs` | Exercicios praticos integrados | `LABCLI`, `LABPROD`, `LABPED`, `LABMVC`, `LABTRCLI`, `LABREST`, `LABTRB`, `LABPedidoService` |
 
-3. Caso já exista um repositório com o mesmo nome, basta substituir a URL do `git clone` acima.
+## Convencoes
 
-Os usuários podem contribuir, sugerir melhorias e compartilhar os exercícios e práticas propostos.
+- Arquivos `.prw` contem fontes ADVPL.
+- Arquivos `.tlpp` contem fontes TLPP.
+- `fonte-base/` deve conter esqueletos, exemplos didaticos e pontos `TODO`.
+- `fonte-resolvido/` deve conter versoes completas para comparacao apos o exercicio.
+- `setup/dicionario/` deve documentar tabelas, campos e indices customizados necessarios.
+- `06-rest-api/requests/` deve guardar exemplos de chamadas HTTP para teste dos endpoints.
+
+## Pre-requisitos sugeridos
+
+- Ambiente Protheus com AppServer, DBAccess e SmartClient configurados.
+- VS Code com extensao ADVPL/TLPP configurada para o ambiente.
+- Acesso ao SIGACFG/SIGAADV para validacao de dicionario, compilacao e testes.
+- Massa minima de dados nas tabelas SA1, SB1, SC5, SC6 e tabelas customizadas usadas nos labs.
+
+## Tabelas customizadas dos exemplos
+
+Alguns exemplos usam tabelas customizadas didaticas:
+
+- `ZZ1`: cadastro simples MVC.
+- `ZZ2`: cabecalho conceitual de pedido customizado.
+- `ZZ3`: itens conceituais de pedido customizado.
+
+Consulte `setup/dicionario/README.md` antes de executar os exemplos MVC com tabelas customizadas.
+
+## Observacoes
+
+Os fontes deste repositorio sao materiais de treinamento. Antes de usar qualquer rotina em ambiente real, revise regras de negocio, indices, campos obrigatorios, permissoes, logs, tratamento de erro e impacto em performance.

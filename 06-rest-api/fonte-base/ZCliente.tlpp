@@ -1,0 +1,41 @@
+#include "tlpp-core.th"
+#include "protheus.ch"
+#include "restful.ch"
+
+WSRESTFUL ZCliente DESCRIPTION "API de Clientes"
+    WSDATA cCodCli AS CHARACTER
+    WSDATA cLoja   AS CHARACTER
+
+    WSMETHOD GET DESCRIPTION "Consulta cliente" WSSYNTAX "/ZCliente/{cCodCli}/{cLoja}"
+END WSRESTFUL
+
+WSMETHOD GET WSRECEIVE cCodCli, cLoja WSSERVICE ZCliente
+    Local cJson  := ""
+    Local lFound := .F.
+
+    If Empty(::cCodCli) .Or. Empty(::cLoja)
+        SetRestFault(400, "Codigo e loja sao obrigatorios")
+        Return .T.
+    EndIf
+
+    DbSelectArea("SA1")
+    SA1->(DbSetOrder(1))
+
+    lFound := SA1->(DbSeek(xFilial("SA1") + ::cCodCli + ::cLoja))
+
+    If lFound
+        cJson := '{'
+        cJson += '"codigo":"'    + AllTrim(SA1->A1_COD)  + '",'
+        cJson += '"loja":"'      + AllTrim(SA1->A1_LOJA) + '",'
+        cJson += '"nome":"'      + AllTrim(SA1->A1_NOME) + '",'
+        cJson += '"municipio":"' + AllTrim(SA1->A1_MUN)  + '",'
+        cJson += '"uf":"'        + AllTrim(SA1->A1_EST)  + '"'
+        cJson += '}'
+        ::SetResponse(cJson)
+    Else
+        SetRestFault(404, "Cliente nao encontrado")
+    EndIf
+
+    // TODO: registrar log da chamada e revisar autenticacao.
+
+Return .T.
