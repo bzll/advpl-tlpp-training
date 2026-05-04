@@ -1,0 +1,21 @@
+# Editor / OS metadata
+*.log
+*.tmp
+*.swp
+
+# Compiled libraries and executables
+*.o
+*.obj
+*.dll
+*.so
+*.exe
+
+# Node dependencies
+node_modules/
+
+# Python virtual environments
+venv/
+__pycache__/
+
+# VS Code settings
+.vscode/
